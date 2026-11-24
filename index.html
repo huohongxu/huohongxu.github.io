@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>霍洪旭 · 个人站点 / HUO HONGXU</title>
+<meta name="description" content="霍洪旭的个人综合站点：简历与工作履历、完整项目集、App Store 上架应用「小熊画板」。6 年+ 全栈开发经验。知识库与收藏书单见「手记」页。" />
+<meta name="theme-color" content="#04060d" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='18' fill='%2304060d'/%3E%3Cpath d='M28 26h10v18h24V26h10v48H62V54H38v20H28z' fill='%2337e0ff'/%3E%3C/svg%3E" />
+<style>
+/* ============================================================
+   DESIGN SYSTEM — "Signal Terminal" 科技控制台
+   ============================================================ */
+:root{
+  --bg:#04060d;
+  --bg-2:#070b14;
+  --surface:rgba(14,19,31,.72);
+  --surface-solid:#0a0f1a;
+  --line:rgba(255,255,255,.09);
+  --line-strong:rgba(255,255,255,.18);
+  --text:#e9edf6;
+  --text-2:#a5b0c4;
+  --text-3:#6b7689;
+  --cyan:#37e0ff;
+  --cyan-dim:rgba(55,224,255,.14);
+  --cyan-line:rgba(55,224,255,.32);
+  --amber:#ff8a4c;
+  --lime:#c2f84b;
+  --violet:#8b7bff;
+  --shadow:0 24px 60px -24px rgba(0,0,0,.9);
+  --glow:0 0 0 1px rgba(55,224,255,.35), 0 0 28px -6px rgba(55,224,255,.45);
+  --display:"Helvetica Neue","Arial Black","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  --sans:"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Helvetica Neue",Arial,sans-serif;
+  --mono:"SF Mono","JetBrains Mono","Roboto Mono",ui-monospace,Menlo,Consolas,monospace;
+  --wrap:1280px;
+  --ease:cubic-bezier(.22,1,.36,1);
+  --ease-io:cubic-bezier(.65,0,.35,1);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--bg);color:var(--text);
+  font-family:var(--sans);font-size:15px;line-height:1.75;
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  overflow-x:hidden;
+}
+body::before{ /* ambient bloom */
+  content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(900px 520px at 82% -8%, rgba(55,224,255,.16), transparent 62%),
+    radial-gradient(760px 520px at 4% 12%, rgba(139,123,255,.13), transparent 60%),
+    radial-gradient(700px 600px at 50% 108%, rgba(255,138,76,.08), transparent 60%);
+}
+body::after{ /* grid + scanlines */
+  content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(255,255,255,.028) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.028) 1px, transparent 1px),
+    repeating-linear-gradient(0deg, rgba(255,255,255,.014) 0 1px, transparent 1px 3px);
+  background-size:64px 64px, 64px 64px, 100% 3px;
+  mask-image:radial-gradient(ellipse 120% 80% at 50% 0%, #000 30%, transparent 88%);
+  -webkit-mask-image:radial-gradient(ellipse 120% 80% at 50% 0%, #000 30%, transparent 88%);
+}
+::selection{background:var(--cyan);color:#03131a}
+a{color:inherit;text-decoration:none}
+h1,h2,h3,h4,p,ul,li,dl,dd,dt,figure{margin:0;padding:0}
+ul{list-style:none}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+:focus-visible{outline:1px solid var(--cyan);outline-offset:4px;border-radius:2px}
+.scroll-top{position:fixed;right:26px;bottom:26px;z-index:120;width:46px;height:46px;
+  border:1px solid var(--line-strong);background:rgba(8,12,20,.75);backdrop-filter:blur(10px);
+  display:grid;place-items:center;opacity:0;pointer-events:none;transition:.4s var(--ease);}
+.scroll-top.on{opacity:1;pointer-events:auto}
+.scroll-top:hover{border-color:var(--cyan);box-shadow:var(--glow);color:var(--cyan)}
+
+.wrap{width:100%;max-width:var(--wrap);margin:0 auto;padding:0 44px;position:relative;z-index:2}
+
+/* ================= progress bar ================= */
+.progress{position:fixed;top:0;left:0;right:0;height:2px;z-index:200;background:rgba(255,255,255,.05)}
+.progress i{display:block;height:100%;width:0;
+  background:linear-gradient(90deg,var(--violet),var(--cyan),var(--lime));
+  box-shadow:0 0 12px rgba(55,224,255,.8);transition:width .1s linear}
+
+/* ================= cursor ================= */
+.cursor,.cursor-ring{position:fixed;top:0;left:0;z-index:999;pointer-events:none;border-radius:50%;
+  mix-blend-mode:screen;will-change:transform}
+.cursor{width:6px;height:6px;background:var(--cyan);box-shadow:0 0 10px var(--cyan)}
+.cursor-ring{width:34px;height:34px;border:1px solid rgba(55,224,255,.45);transition:width .28s,height .28s,border-color .28s,background .28s}
+.cursor-ring.hot{width:56px;height:56px;border-color:rgba(55,224,255,.85);background:rgba(55,224,255,.07)}
+@media (hover:none),(max-width:900px){.cursor,.cursor-ring{display:none}}
+
+/* ================= nav ================= */
+.nav{position:fixed;top:0;left:0;right:0;z-index:150;
+  background:rgba(4,6,13,.72);backdrop-filter:blur(18px) saturate(160%);
+  border-bottom:1px solid transparent;transition:.35s var(--ease)}
+.nav.stuck{border-bottom-color:var(--line);background:rgba(4,6,13,.92)}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;height:66px;gap:28px}
+.brand{display:flex;align-items:center;gap:12px;font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase}
+.brand-mark{width:30px;height:30px;border:1px solid var(--cyan-line);display:grid;place-items:center;
+  font-family:var(--display);font-weight:800;font-size:13px;color:var(--cyan);
+  box-shadow:inset 0 0 14px rgba(55,224,255,.18);position:relative;animation:pulse 3.4s var(--ease-io) infinite}
+.brand-mark::after{content:"";position:absolute;inset:-4px;border:1px solid rgba(55,224,255,.12)}
+.brand b{font-weight:600;letter-spacing:.2em;color:var(--text)}
+.brand em{font-style:normal;color:var(--text-3)}
+.nav-links{display:flex;align-items:center;gap:4px}
+.nav-links a{
+  position:relative;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--text-3);padding:8px 13px;transition:color .3s;
+}
+.nav-links a span{color:var(--cyan);opacity:.55;margin-right:7px;font-size:10px}
+.nav-links a::after{content:"";position:absolute;left:13px;right:13px;bottom:2px;height:1px;
+  background:var(--cyan);transform:scaleX(0);transform-origin:left;transition:transform .4s var(--ease)}
+.nav-links a:hover{color:var(--text)}
+.nav-links a:hover::after,.nav-links a.active::after{transform:scaleX(1)}
+.nav-links a.active{color:var(--text)}
+.nav-cta{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;
+  border:1px solid var(--cyan-line);color:var(--cyan);padding:9px 16px;transition:.35s var(--ease);position:relative;overflow:hidden}
+.nav-notes{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--lime);border:1px solid rgba(194,248,75,.3);padding:9px 15px;transition:.35s var(--ease);white-space:nowrap}
+.nav-notes i{font-style:normal;margin-left:7px;opacity:.75;transition:.35s}
+.nav-notes:hover{border-color:var(--lime);background:rgba(194,248,75,.08);box-shadow:0 0 24px -8px var(--lime)}
+.nav-notes:hover i{transform:translate(2px,-2px)}
+.nav-cta::after{content:"";position:absolute;inset:0;background:var(--cyan);transform:translateY(101%);transition:transform .4s var(--ease);z-index:-1}
+.nav-cta:hover{color:#03131a;box-shadow:0 0 26px -6px rgba(55,224,255,.7)}
+.nav-cta:hover::after{transform:translateY(0)}
+@media (max-width:1080px){.nav-links{display:none}}
+
+/* ================= hero ================= */
+.hero{position:relative;min-height:100vh;display:flex;align-items:center;padding:112px 0 120px;overflow:hidden}
+#fx{position:absolute;inset:0;width:100%;height:100%;z-index:1;opacity:.85}
+.hero-inner{position:relative;z-index:3;width:100%}
+.hero-top{display:flex;flex-wrap:wrap;gap:10px 26px;align-items:center;margin-bottom:34px}
+.chip{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;
+  border:1px solid var(--line);padding:6px 12px;color:var(--text-2);display:inline-flex;align-items:center;gap:8px}
+.chip.live{border-color:rgba(194,248,75,.35);color:var(--lime)}
+.chip.live i{width:6px;height:6px;border-radius:50%;background:var(--lime);box-shadow:0 0 10px var(--lime);animation:blink 1.6s infinite}
+.hero h1{
+  font-family:var(--display);font-weight:800;line-height:.86;letter-spacing:-.035em;
+  font-size:clamp(3.2rem,9.4vw,8.4rem);margin:0 0 6px;
+  text-transform:uppercase;
+  background:linear-gradient(180deg,#ffffff 0%, #b9c6dc 62%, #5d6a80 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.hero h1 .line2{display:block}
+.hero-cn{font-family:var(--sans);font-weight:700;font-size:clamp(1.4rem,3.2vw,2.3rem);letter-spacing:.42em;
+  color:var(--text);margin:20px 0 0;text-indent:.42em}
+.hero-sub{margin-top:26px;max-width:640px;color:var(--text-2);font-size:16.5px;line-height:1.85}
+.hero-sub b{color:var(--cyan);font-weight:600}
+.typed{font-family:var(--mono);color:var(--cyan);border-left:2px solid var(--cyan-line);padding-left:12px;margin-top:22px;
+  font-size:13px;letter-spacing:.04em;min-height:22px}
+.caret{display:inline-block;width:8px;height:15px;background:var(--cyan);vertical-align:-2px;margin-left:2px;animation:blink 1s steps(1) infinite}
+.hero-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;margin-top:44px;background:var(--line);border:1px solid var(--line)}
+.hero-stats div{background:rgba(6,9,17,.72);padding:20px 20px 18px;transition:.4s var(--ease);position:relative;overflow:hidden}
+.hero-stats div:hover{background:rgba(55,224,255,.06)}
+.hero-stats b{display:block;font-family:var(--display);font-weight:800;font-size:clamp(1.7rem,3vw,2.5rem);line-height:1;
+  letter-spacing:-.02em;color:var(--text)}
+.hero-stats b em{font-style:normal;color:var(--cyan);font-size:.5em;margin-left:4px}
+.hero-stats span{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-3);margin-top:10px;display:block}
+.hero-cta{display:flex;flex-wrap:wrap;gap:14px;margin-top:36px}
+.btn{position:relative;font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+  padding:15px 30px;border:1px solid var(--line-strong);color:var(--text);overflow:hidden;transition:.4s var(--ease)}
+.btn span{position:relative;z-index:2}
+.btn::before{content:"";position:absolute;inset:0;background:linear-gradient(120deg,var(--cyan),#5fd0ff);transform:translateX(-101%);transition:transform .5s var(--ease);z-index:1}
+.btn:hover{color:#03131a;border-color:var(--cyan);box-shadow:0 14px 40px -18px rgba(55,224,255,.9)}
+.btn:hover::before{transform:translateX(0)}
+.btn.ghost{border-color:var(--line);color:var(--text-2)}
+.btn.ghost::before{background:rgba(255,255,255,.07)}
+.btn.ghost:hover{color:var(--text);border-color:var(--line-strong);box-shadow:none}
+.scroll-hint{position:absolute;left:50%;bottom:26px;transform:translateX(-50%);z-index:4;
+  display:flex;flex-direction:column;align-items:center;gap:10px;font-family:var(--mono);font-size:9.5px;
+  letter-spacing:.2em;text-transform:uppercase;color:var(--text-3)}
+.scroll-hint .bar{width:1px;height:44px;background:linear-gradient(180deg,var(--cyan),transparent);position:relative;overflow:hidden}
+.scroll-hint .bar::after{content:"";position:absolute;top:-44px;left:0;width:100%;height:44px;background:var(--cyan);animation:drop 2.1s var(--ease-io) infinite}
+.hud-corner{position:absolute;width:26px;height:26px;border:1px solid var(--cyan-line);z-index:4;opacity:.7}
+.hud-corner.tl{top:104px;left:44px;border-right:0;border-bottom:0}
+.hud-corner.br{bottom:40px;right:44px;border-left:0;border-top:0}
+.hud-meta{position:absolute;right:44px;top:120px;z-index:4;text-align:right;font-family:var(--mono);font-size:10px;
+  letter-spacing:.14em;color:var(--text-3);line-height:2;text-transform:uppercase}
+.hud-meta b{color:var(--cyan);font-weight:500}
+
+/* ================= ticker ================= */
+.ticker{border-top:1px solid var(--line);border-bottom:1px solid var(--line);overflow:hidden;padding:13px 0;position:relative;z-index:2;
+  background:rgba(6,9,17,.6)}
+.ticker-track{display:flex;gap:44px;width:max-content;animation:marquee 42s linear infinite}
+.ticker:hover .ticker-track{animation-play-state:paused}
+.ticker-track span{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--text-3);display:flex;align-items:center;gap:44px;white-space:nowrap}
+.ticker-track span::after{content:"◆";color:var(--cyan);font-size:8px;opacity:.7}
+
+/* ================= section frame ================= */
+section{position:relative;z-index:2}
+.sec{padding:120px 0}
+.sec-head{display:flex;align-items:flex-end;justify-content:space-between;gap:32px;flex-wrap:wrap;
+  padding-bottom:22px;border-bottom:1px solid var(--line);margin-bottom:56px}
+.sec-title{display:flex;align-items:baseline;gap:20px}
+.sec-no{font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--cyan);position:relative;padding-top:4px}
+.sec-no::before{content:"[";opacity:.5}.sec-no::after{content:"]";opacity:.5}
+.sec-title h2{font-family:var(--display);font-weight:800;font-size:clamp(1.9rem,4.4vw,3.3rem);line-height:1;letter-spacing:-.025em;text-transform:uppercase}
+.sec-title h2 em{font-style:normal;font-family:var(--sans);font-weight:600;color:var(--text-3);font-size:.5em;letter-spacing:.16em;margin-left:14px}
+.sec-desc{font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--text-3);text-transform:uppercase;max-width:420px;line-height:1.9;text-align:right}
+
+/* ================= about ================= */
+.about-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:70px;align-items:start}
+.about-lead{font-size:18px;line-height:2;color:var(--text-2)}
+.about-lead b{color:var(--text);font-weight:600}
+.about-lead em{font-style:normal;color:var(--cyan)}
+.about-body{margin-top:26px;color:var(--text-2);font-size:14.5px;line-height:1.95;max-width:60ch}
+.pill-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line)}
+.pill-grid div{background:var(--surface-solid);padding:22px 22px 20px;transition:.4s var(--ease)}
+.pill-grid div:hover{background:rgba(55,224,255,.05)}
+.pill-grid dt{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--text-3);margin-bottom:10px}
+.pill-grid dd{font-size:15px;color:var(--text);font-weight:600;line-height:1.5}
+.pill-grid dd small{display:block;font-family:var(--mono);font-size:11px;font-weight:400;color:var(--text-3);letter-spacing:.04em;margin-top:6px}
+
+/* ================= resume / timeline ================= */
+.tl{position:relative;padding-left:30px}
+.tl::before{content:"";position:absolute;left:6px;top:6px;bottom:6px;width:1px;
+  background:linear-gradient(180deg,var(--cyan),rgba(139,123,255,.5),transparent)}
+.tl-item{position:relative;padding:0 0 40px}
+.tl-item:last-child{padding-bottom:0}
+.tl-item::before{content:"";position:absolute;left:-29px;top:7px;width:11px;height:11px;border-radius:50%;
+  background:var(--bg);border:1px solid var(--cyan);box-shadow:0 0 0 4px rgba(4,6,13,1), 0 0 14px rgba(55,224,255,.7)}
+.tl-item::after{content:"";position:absolute;left:-29px;top:12px;width:11px;height:11px;border-radius:50%;background:var(--cyan);opacity:.25;animation:ping 2.6s var(--ease-io) infinite}
+.tl-when{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--cyan)}
+.tl-role{font-family:var(--display);font-weight:700;font-size:22px;letter-spacing:-.01em;margin:8px 0 4px}
+.tl-org{font-size:13.5px;color:var(--text-2)}
+.tl-desc{margin-top:12px;font-size:14px;line-height:1.9;color:var(--text-2);max-width:62ch}
+.tl-desc li{position:relative;padding-left:16px;margin-bottom:6px}
+.tl-desc li::before{content:"";position:absolute;left:0;top:11px;width:5px;height:5px;background:var(--cyan);opacity:.75}
+.stack-cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:24px;margin-top:12px}
+.stack-col h4{font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--text-3);
+  padding-bottom:9px;border-bottom:1px solid var(--line);margin-bottom:12px}
+.stack-col li{font-size:13.5px;color:var(--text-2);padding:6px 0;display:flex;justify-content:space-between;gap:12px;transition:.3s}
+.stack-col li:hover{color:var(--cyan);transform:translateX(3px)}
+.stack-col li span{font-family:var(--mono);font-size:10px;color:var(--text-3);letter-spacing:.08em}
+.skill-meter{margin-top:52px;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px 44px}
+.meter-row span{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--text-2);margin-bottom:9px}
+.meter-row span b{color:var(--cyan);font-weight:500}
+.meter{height:3px;background:rgba(255,255,255,.08);overflow:hidden}
+.meter i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--violet),var(--cyan));
+  box-shadow:0 0 12px rgba(55,224,255,.6);transition:width 1.3s var(--ease)}
+
+/* ================= projects ================= */
+.filters{display:flex;flex-wrap:wrap;gap:9px;margin:46px 0 38px}
+.filters button{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;
+  border:1px solid var(--line);padding:9px 15px;color:var(--text-3);transition:.35s var(--ease)}
+.filters button:hover{color:var(--text);border-color:var(--line-strong)}
+.filters button.on{background:var(--cyan);border-color:var(--cyan);color:#03131a;box-shadow:0 0 24px -8px var(--cyan)}
+.proj-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.card{
+  position:relative;border:1px solid var(--line);background:linear-gradient(160deg,rgba(16,22,36,.86),rgba(8,11,19,.9));
+  padding:28px 28px 26px;overflow:hidden;transform-style:preserve-3d;
+  transition:border-color .45s var(--ease), transform .45s var(--ease), box-shadow .45s var(--ease);
+}
+.card::before{ /* spotlight */
+  content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .4s;
+  background:radial-gradient(420px circle at var(--mx,50%) var(--my,50%), rgba(55,224,255,.14), transparent 62%);
+}
+.card:hover::before{opacity:1}
+.card:hover{border-color:var(--cyan-line);box-shadow:0 30px 70px -40px rgba(55,224,255,.55)}
+.card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;position:relative;z-index:2}
+.card-idx{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;color:var(--cyan);opacity:.85}
+.card-type{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-3);
+  border:1px solid var(--line);padding:4px 9px;white-space:nowrap}
+.card h3{font-family:var(--display);font-weight:700;font-size:22px;letter-spacing:-.015em;margin:14px 0 0;line-height:1.25;position:relative;z-index:2}
+.card .en{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-3);margin-top:7px;position:relative;z-index:2}
+.card p{margin-top:16px;font-size:13.5px;line-height:1.85;color:var(--text-2);position:relative;z-index:2}
+.tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:18px;position:relative;z-index:2}
+.tags li{font-family:var(--mono);font-size:10px;letter-spacing:.06em;color:var(--text-3);
+  border:1px solid var(--line);padding:5px 9px;transition:.35s var(--ease)}
+.card:hover .tags li{border-color:rgba(55,224,255,.28);color:var(--text-2)}
+.card-foot{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:22px;padding-top:16px;
+  border-top:1px solid var(--line);position:relative;z-index:2}
+.card-foot span{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--text-3)}
+.card-arrow{font-family:var(--mono);font-size:13px;color:var(--cyan);transform:translateX(-6px);opacity:0;transition:.45s var(--ease)}
+.card:hover .card-arrow{transform:translateX(0);opacity:1}
+.card.hide{display:none}
+.card.wide{grid-column:1/-1}
+.card.wide .card-body-wide{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:8px 40px;align-items:start}
+@media (max-width:900px){.card.wide .card-body-wide{grid-template-columns:1fr}}
+
+/* ================= featured app (App Store) ================= */
+.feature{
+  margin-top:26px;border:1px solid var(--line);position:relative;overflow:hidden;
+  background:linear-gradient(135deg, rgba(255,138,76,.055), rgba(8,11,19,.92) 44%);
+  display:grid;grid-template-columns:minmax(0,.94fr) minmax(0,1.06fr);
+}
+.feature::before{content:"";position:absolute;left:-150px;top:-170px;width:440px;height:440px;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,178,90,.17),transparent 66%);pointer-events:none}
+.feature::after{content:"APP STORE";position:absolute;right:18px;bottom:10px;font-family:var(--display);font-weight:800;
+  font-size:64px;letter-spacing:-.02em;color:rgba(255,255,255,.026);pointer-events:none;line-height:1}
+.feat-left{padding:42px 38px;border-right:1px solid var(--line);position:relative;z-index:3}
+.feat-top{display:flex;align-items:flex-start;gap:20px}
+.feat-icon{width:96px;height:96px;flex:0 0 96px;border-radius:22px;overflow:hidden;
+  border:1px solid rgba(255,255,255,.14);box-shadow:0 22px 50px -20px rgba(255,178,90,.55);transition:.5s var(--ease)}
+.feature:hover .feat-icon{transform:translateY(-4px) rotate(-2deg);box-shadow:0 30px 60px -20px rgba(255,178,90,.75)}
+.feat-icon img{width:100%;height:100%;display:block;object-fit:cover}
+.feat-badge{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--lime);border:1px solid rgba(194,248,75,.32);padding:5px 10px;margin-bottom:12px}
+.feat-badge i{width:5px;height:5px;border-radius:50%;background:var(--lime);box-shadow:0 0 9px var(--lime);animation:blink 1.7s infinite}
+.feat-left h3{font-family:var(--display);font-weight:800;font-size:clamp(1.85rem,3.4vw,2.55rem);letter-spacing:-.022em;line-height:1.05}
+.feat-sub{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--text-3);margin-top:9px}
+.feat-desc{margin-top:18px;font-size:14.5px;line-height:1.9;color:var(--text-2);max-width:44ch}
+.feat-feats{margin-top:20px;display:grid;gap:8px}
+.feat-feats li{position:relative;padding-left:18px;font-size:13.5px;color:var(--text-2);line-height:1.7}
+.feat-feats li::before{content:"";position:absolute;left:0;top:9px;width:6px;height:6px;border-radius:2px;background:var(--amber)}
+.feat-meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(84px,1fr));gap:1px;margin-top:26px;
+  background:var(--line);border:1px solid var(--line)}
+.feat-meta div{background:rgba(8,11,19,.92);padding:12px 13px}
+.feat-meta dt{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-3)}
+.feat-meta dd{font-size:14px;color:var(--text);font-weight:600;margin-top:5px}
+.feat-cta{margin-top:28px;display:inline-flex;align-items:center;gap:11px;border:1px solid var(--line-strong);
+  background:#0a0d14;padding:14px 24px;transition:.45s var(--ease)}
+.feat-cta:hover{border-color:var(--cyan);box-shadow:0 16px 40px -18px rgba(55,224,255,.85);transform:translateY(-3px)}
+.feat-cta svg{width:17px;height:17px;fill:var(--text);transition:.4s}
+.feat-cta:hover svg{fill:var(--cyan)}
+.feat-cta span{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+.feat-right{position:relative;min-height:430px;padding:36px 30px;overflow:hidden;
+  background:radial-gradient(620px 320px at 58% 40%, rgba(255,138,76,.09), transparent 70%)}
+.shot{position:absolute;border-radius:13px;overflow:hidden;border:1px solid rgba(255,255,255,.14);
+  box-shadow:0 36px 74px -36px rgba(0,0,0,1);transition:transform .7s var(--ease)}
+.shot img{display:block;width:100%;height:auto}
+.shot-a{width:56%;left:0;top:2%;transform:perspective(1400px) rotateY(12deg);z-index:1}
+.shot-b{width:56%;right:0;top:22%;transform:perspective(1400px) rotateY(-12deg);z-index:2}
+.feature:hover .shot-a{transform:perspective(1400px) rotateY(6deg) translateX(-8px)}
+.feature:hover .shot-b{transform:perspective(1400px) rotateY(-6deg) translateX(8px)}
+@media (max-width:1080px){
+  .feature{grid-template-columns:1fr}
+  .feat-left{border-right:0;border-bottom:1px solid var(--line);padding:34px 26px}
+  .feat-right{min-height:360px;padding:28px 22px}
+  .shot-a{width:60%;left:2%}
+  .shot-b{width:60%;right:2%}
+}
+@media (max-width:620px){
+  .feat-right{min-height:auto;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .shot{position:relative;width:100%!important;left:auto!important;right:auto!important;top:auto!important;transform:none!important}
+  .feature:hover .shot{transform:none!important}
+}
+
+/* ================= contact ================= */
+.contact-box{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:60px;align-items:center;
+  border:1px solid var(--line);background:linear-gradient(140deg,rgba(14,19,31,.9),rgba(8,11,19,.94));padding:52px 48px;position:relative;overflow:hidden}
+.contact-box::after{content:"";position:absolute;right:-90px;top:-90px;width:280px;height:280px;border-radius:50%;
+  background:radial-gradient(circle,rgba(55,224,255,.16),transparent 68%);pointer-events:none}
+.ct-label{font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--cyan)}
+.ct-mail{font-family:var(--display);font-weight:800;font-size:clamp(1.5rem,4vw,2.9rem);letter-spacing:-.025em;
+  margin:16px 0 0;word-break:break-all;transition:.4s var(--ease);position:relative;display:inline-block}
+.ct-mail:hover{color:var(--cyan);text-shadow:0 0 30px rgba(55,224,255,.55)}
+.ct-sub{margin-top:16px;color:var(--text-2);font-size:14px;max-width:46ch;position:relative}
+.ct-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px;position:relative}
+.ct-list{display:grid;gap:1px;background:var(--line);border:1px solid var(--line);position:relative}
+.ct-list div{background:rgba(8,11,19,.85);padding:18px 20px;display:flex;justify-content:space-between;align-items:center;gap:16px;transition:.35s}
+.ct-list div:hover{background:rgba(55,224,255,.05)}
+.ct-list dt{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--text-3)}
+.ct-list dd{font-size:14.5px;color:var(--text);text-align:right}
+.copy-note{font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--lime);opacity:0;transition:.3s;margin-left:10px;align-self:center}
+.copy-note.on{opacity:1}
+
+/* ================= footer ================= */
+footer{border-top:1px solid var(--line);padding:34px 0;position:relative;z-index:2}
+.foot-inner{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:16px;
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;color:var(--text-3);text-transform:uppercase}
+.foot-inner a:hover{color:var(--cyan)}
+
+/* ================= reveal ================= */
+.rv{opacity:0;transform:translateY(26px);transition:opacity .85s var(--ease),transform .85s var(--ease)}
+.rv.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition-duration:.01ms!important}
+  .rv{opacity:1;transform:none}
+}
+
+/* ================= responsive ================= */
+@media (max-width:1080px){
+  .about-grid{grid-template-columns:1fr;gap:44px}
+  .proj-grid{grid-template-columns:1fr}
+  .contact-box{grid-template-columns:1fr;gap:34px;padding:38px 26px}
+}
+@media (max-width:760px){
+  .wrap{padding:0 20px}
+  .hero{min-height:auto;padding:120px 0 70px}
+  .hero-stats{grid-template-columns:repeat(2,1fr)}
+  .pill-grid{grid-template-columns:1fr}
+  .sec{padding:80px 0}
+  .sec-desc{text-align:left}
+  .hud-corner,.hud-meta{display:none}
+  .hero-cn{letter-spacing:.3em;text-indent:.3em}
+}
+</style>
+</head>
+<body>
+
+<div class="progress"><i id="bar"></i></div>
+<div class="cursor" id="cur"></div>
+<div class="cursor-ring" id="ring"></div>
+
+<header class="nav" id="nav">
+  <div class="wrap nav-inner">
+    <a class="brand" href="#top">
+      <span class="brand-mark">H</span>
+      <span><b>霍洪旭</b> &nbsp;/&nbsp; <em>HUO HONGXU</em></span>
+    </a>
+    <nav class="nav-links" id="links">
+      <a href="#about"><span>01</span>简介</a>
+      <a href="#resume"><span>02</span>履历</a>
+      <a href="#work"><span>03</span>项目</a>
+      <a href="#contact"><span>04</span>联系</a>
+    </nav>
+    <a class="nav-notes" href="notes.html">手记 Notes <i>↗</i></a>
+    <a class="nav-cta" href="#contact">Open to work</a>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ================= HERO ================= -->
+  <section class="hero">
+    <canvas id="fx"></canvas>
+    <span class="hud-corner tl"></span>
+    <span class="hud-corner br"></span>
+    <div class="hud-meta">
+      <div>POS <b>37.1°N 117.2°E</b></div>
+      <div>TIANJIN / CN</div>
+      <div>LOCAL <b id="clock">--:--:--</b></div>
+    </div>
+
+    <div class="wrap hero-inner">
+      <div class="hero-top">
+        <span class="chip live"><i></i>Open to work · 期待新机会</span>
+        <span class="chip">Full-Stack / Electron / Mini-Program</span>
+        <span class="chip">6+ Years</span>
+      </div>
+
+      <h1><span class="line2">Huo</span> Hongxu</h1>
+      <p class="hero-cn">霍洪旭</p>
+
+      <p class="hero-sub">
+        软件开发工程师，现居天津。<b>6 年+</b>全栈开发经验，专注桌面端客户端、Web 前端与移动端应用，
+        独立开发的 <b>「小熊画板」</b>已在 App Store 上架，
+        并沉淀了一批可复用的<b>项目</b>。长期整理的<b>知识库</b>与<b>收藏书单</b>收在
+        <b>「手记」</b>里。
+      </p>
+
+      <div class="typed"><span id="typed"></span><i class="caret"></i></div>
+
+      <div class="hero-stats">
+        <div><b data-count="6" data-suffix="+">0</b><span>Years Experience</span></div>
+        <div><b data-count="9">0</b><span>Delivered Projects</span></div>
+        <div><b data-count="1">0</b><span>App Store App</span></div>
+        <div><b data-count="20" data-suffix="+">0</b><span>Tech Stacks</span></div>
+      </div>
+
+      <div class="hero-cta">
+        <a class="btn" href="#work"><span>浏览项目 →</span></a>
+        <a class="btn ghost" href="notes.html"><span>我的手记 ↗</span></a>
+        <a class="btn ghost" href="#contact"><span>联系我</span></a>
+      </div>
+    </div>
+
+    <div class="scroll-hint"><span>Scroll</span><span class="bar"></span></div>
+  </section>
+
+  <!-- ================= TICKER ================= -->
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-track" id="track"></div>
+  </div>
+
+  <!-- ================= ABOUT ================= -->
+  <section class="sec" id="about">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <div class="sec-title">
+          <span class="sec-no">01</span>
+          <h2>Profile<em>简介</em></h2>
+        </div>
+        <p class="sec-desc">一个把「写代码」和「写下来」当成同一件事的工程师</p>
+      </div>
+
+      <div class="about-grid">
+        <div class="rv">
+          <p class="about-lead">
+            我是霍洪旭，<b>软件开发工程师</b>，2019 年起持续在企业级应用一线开发。
+            做过 <em>Electron 桌面客户端</em>、<em>微信小程序</em>、<em>iOS App</em> 与 <em>Web 管理平台</em>，
+            也做视频监控、数据采集与可视化这类"看起来不酷但很难"的系统。
+          </p>
+          <p class="about-body">
+            我相信好的工程不只是把功能写出来，还包括让代码可维护、让体验可预期、让知识能沉淀。
+            所以除了简历和项目，我还单独开了一页<a href="notes.html" style="color:var(--cyan);border-bottom:1px solid var(--cyan-line)">「手记」</a>，
+            放着我长期整理的知识库与收藏文章——它们和项目一样，是我技术判断力的组成部分。
+          </p>
+        </div>
+
+        <dl class="pill-grid rv">
+          <div><dt>Base</dt><dd>中国 · 天津<small>Tianjin, China</small></dd></div>
+          <div><dt>Degree</dt><dd>本科<small>Bachelor</small></dd></div>
+          <div><dt>Role</dt><dd>软件开发工程师<small>Software Engineer</small></dd></div>
+          <div><dt>Years</dt><dd>6 年+<small>Since 2019</small></dd></div>
+          <div><dt>Focus</dt><dd>桌面端 · Web 前端<small>Electron / Vue / React</small></dd></div>
+          <div><dt>Status</dt><dd>开放机会<small>Open to work</small></dd></div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= RESUME ================= -->
+  <section class="sec" id="resume">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <div class="sec-title">
+          <span class="sec-no">02</span>
+          <h2>Resume<em>履历与能力</em></h2>
+        </div>
+        <p class="sec-desc">工作经历 / 技术栈分布 / 能力自评</p>
+      </div>
+
+      <div class="about-grid" style="margin-bottom:70px">
+        <div class="rv">
+          <div class="tl">
+            <div class="tl-item">
+              <div class="tl-when">2019.01 — Present</div>
+              <div class="tl-role">软件开发工程师</div>
+              <div class="tl-org">天津联物科技有限公司</div>
+              <ul class="tl-desc">
+                <li>负责企业级客户端与 Web 管理平台的前端架构设计与核心模块开发，覆盖 Electron 桌面端、Vue / React Web 与小程序多端。</li>
+                <li>主导多个中大型项目的从 0 到 1 交付，包括智能监控客户端、数据采集系统、财务智能助手平台等。</li>
+                <li>推动组件库与工程规范落地，统一构建、发布与质量校验流程，显著降低多项目并行维护成本。</li>
+                <li>参与实时通信与音视频相关模块（FFmpeg、WebSocket）的方案设计与性能优化。</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="rv">
+          <div class="stack-cols" style="grid-template-columns:1fr">
+            <div class="stack-col">
+              <h4>Desktop / Electron</h4>
+              <ul>
+                <li>Electron <span>主进程 / 渲染分层</span></li>
+                <li>React <span>18 · Hooks 体系</span></li>
+                <li>Node.js <span>服务与 IPC</span></li>
+                <li>FFmpeg <span>流媒体处理</span></li>
+                <li>WebSocket <span>实时数据通道</span></li>
+              </ul>
+            </div>
+            <div class="stack-col">
+              <h4>Web Frontend</h4>
+              <ul>
+                <li>Vue 3 <span>Composition API</span></li>
+                <li>Vite <span>构建与工程化</span></li>
+                <li>React <span>Ant Design Pro</span></li>
+                <li>TypeScript <span>类型约束</span></li>
+                <li>Tailwind CSS <span>原子化样式</span></li>
+              </ul>
+            </div>
+            <div class="stack-col">
+              <h4>Mobile</h4>
+              <ul>
+                <li>微信小程序 <span>原生 / Vant Weapp</span></li>
+                <li>JavaScript / WXSS <span>页面与样式</span></li>
+                <li>iOS <span>Objective-C / Swift</span></li>
+                <li>UIKit <span>界面体系</span></li>
+                <li>AFNetworking <span>网络层</span></li>
+              </ul>
+            </div>
+            <div class="stack-col">
+              <h4>Data / Visualization</h4>
+              <ul>
+                <li>ECharts <span>大数据图表</span></li>
+                <li>Pinia / Vuex <span>状态管理</span></li>
+                <li>Dva <span>Redux 生态</span></li>
+                <li>SQL <span>数据建模</span></li>
+                <li>RBAC <span>权限体系</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sec-head rv" style="margin-bottom:34px">
+        <div class="sec-title"><span class="sec-no">02.1</span><h2 style="font-size:clamp(1.3rem,2.6vw,1.9rem)">Capability<em>能力分布</em></h2></div>
+        <p class="sec-desc">自评，仅供参考</p>
+      </div>
+      <div class="skill-meter rv" id="meters">
+        <div class="meter-row"><span>前端工程化 <b>95%</b></span><div class="meter" data-w="95"></div></div>
+        <div class="meter-row"><span>桌面端 / Electron <b>88%</b></span><div class="meter" data-w="88"></div></div>
+        <div class="meter-row"><span>移动端开发 <b>82%</b></span><div class="meter" data-w="82"></div></div>
+        <div class="meter-row"><span>数据可视化 <b>80%</b></span><div class="meter" data-w="80"></div></div>
+        <div class="meter-row"><span>架构与抽象 <b>85%</b></span><div class="meter" data-w="85"></div></div>
+        <div class="meter-row"><span>后端接口协作 <b>75%</b></span><div class="meter" data-w="75"></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= PROJECTS ================= -->
+  <section class="sec" id="work">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <div class="sec-title">
+          <span class="sec-no">03</span>
+          <h2>Projects<em>项目集</em></h2>
+        </div>
+        <p class="sec-desc">1 款 App Store 上架应用 + 9 个已交付项目 · 覆盖 桌面端 / 小程序 / Web / iOS</p>
+      </div>
+
+      <!-- ---------- featured: App Store 上架应用 ---------- -->
+      <article class="feature rv" id="appstore">
+        <div class="feat-left">
+          <div class="feat-top">
+            <div class="feat-icon"><img src="assets/app-icon.jpg" alt="小熊画板 App 图标" width="96" height="96" /></div>
+            <div>
+              <span class="feat-badge"><i></i>App Store 已上架</span>
+              <h3>小熊画板</h3>
+              <div class="feat-sub">Little Bear Canvas · 护眼模式</div>
+            </div>
+          </div>
+
+          <p class="feat-desc">
+            为 iPad 打造的儿童创意画板应用。简单易用、色彩丰富，支持护眼模式保护视力，
+            横竖屏完美适配，专注让孩子自由表达。
+          </p>
+
+          <ul class="feat-feats">
+            <li>护眼模式：降低屏幕蓝光，长时间创作更护眼</li>
+            <li>无广告干扰，把注意力完全留给创作本身</li>
+            <li>支持横竖屏，iPad 完美适配，平板与手持都顺手</li>
+            <li>轻量纯粹，1.7 MB 安装包，不收集任何数据</li>
+          </ul>
+
+          <dl class="feat-meta">
+            <div><dt>版本</dt><dd>v1.0</dd></div>
+            <div><dt>大小</dt><dd>1.7 MB</dd></div>
+            <div><dt>分类</dt><dd>教育</dd></div>
+            <div><dt>分级</dt><dd>4+</dd></div>
+            <div><dt>平台</dt><dd>iPad</dd></div>
+          </dl>
+
+          <a class="feat-cta" href="https://apps.apple.com/cn/app/id6761086546" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.05 12.54c-.03-2.6 2.12-3.85 2.22-3.91-1.21-1.77-3.1-2.01-3.77-2.04-1.6-.16-3.12.94-3.93.94-.81 0-2.06-.92-3.39-.9-1.74.03-3.35 1.01-4.24 2.57-1.81 3.14-.46 7.79 1.3 10.34.86 1.25 1.89 2.65 3.24 2.6 1.3-.05 1.79-.84 3.36-.84 1.57 0 2.01.84 3.38.81 1.4-.02 2.28-1.27 3.13-2.53.99-1.45 1.39-2.85 1.41-2.92-.03-.01-2.7-1.04-2.71-4.12zM14.46 4.9c.72-.87 1.2-2.08 1.07-3.29-1.03.04-2.29.69-3.03 1.56-.66.77-1.24 2-1.09 3.18 1.15.09 2.32-.58 3.05-1.45z"/></svg>
+            <span>在 App Store 获取</span>
+          </a>
+        </div>
+
+        <div class="feat-right">
+          <div class="shot shot-a"><img src="assets/shot-1.jpg" alt="小熊画板应用界面截图一" /></div>
+          <div class="shot shot-b"><img src="assets/shot-2.jpg" alt="小熊画板应用界面截图二" /></div>
+        </div>
+      </article>
+
+      <div class="filters rv" id="filters">
+        <button class="on" data-f="all">All</button>
+        <button data-f="desktop">桌面端</button>
+        <button data-f="mini">小程序</button>
+        <button data-f="web">Web</button>
+        <button data-f="ios">iOS</button>
+      </div>
+
+      <div class="proj-grid" id="projGrid">
+        <article class="card rv" data-type="ios">
+          <div class="card-top"><span class="card-idx">01</span><span class="card-type">iOS App</span></div>
+          <h3>智能家居商城</h3>
+          <div class="en">Smart Home Commerce</div>
+          <p>面向智能家居设备的一体化商城应用，覆盖商品浏览、设备详情、下单支付与售后全链路，并以原生能力承载设备联动体验。</p>
+          <ul class="tags"><li>Objective-C</li><li>Swift</li><li>UIKit</li><li>Masonry</li><li>AFNetworking</li></ul>
+          <div class="card-foot"><span>2019 — 2020</span><i class="card-arrow">→</i></div>
+        </article>
+
+        <article class="card rv" data-type="mini">
+          <div class="card-top"><span class="card-idx">02</span><span class="card-type">微信小程序</span></div>
+          <h3>新零售小程序</h3>
+          <div class="en">New Retail Mini-Program</div>
+          <p>线下门店导购与线上商城打通的小程序端，支持会员权益、门店核销与实时订单状态，用户路径短、转化链路清晰。</p>
+          <ul class="tags"><li>JavaScript</li><li>WXML</li><li>WXSS</li><li>小程序原生</li></ul>
+          <div class="card-foot"><span>2020</span><i class="card-arrow">→</i></div>
+        </article>
+
+        <article class="card rv" data-type="mini">
+          <div class="card-top"><span class="card-idx">03</span><span class="card-type">微信小程序</span></div>
+          <h3>大易 SaaS OA 小程序</h3>
+          <div class="en">Da Yi SaaS OA</div>
+          <p>以动态表单与审批流为核心的企业 OA 小程序，把冗长的线下审批搬到移动端，支持流程自定义与多角色权限。</p>
+          <ul class="tags"><li>Vant Weapp</li><li>Pinia</li><li>动态表单引擎</li><li>审批流</li></ul>
+          <div class="card-foot"><span>2021</span><i class="card-arrow">→</i></div>
+        </article>
+
+        <article class="card rv" data-type="desktop">
+          <div class="card-top"><span class="card-idx">04</span><span class="card-type">Electron</span></div>
+          <h3>智能监控客户端</h3>
+          <div class="en">Smart Monitoring Client</div>
+          <p>基于 FFmpeg 的桌面端视频监控客户端，支持多路实时画面、录像回放与告警推送，并与后端 WebSocket 通道保持低延迟同步。</p>
+          <ul class="tags"><li>Electron</li><li>FFmpeg</li><li>React</li><li>WebSocket</li></ul>
+          <div class="card-foot"><span>2021 — 2022</span><i class="card-arrow">→</i></div>
+        </article>
+
+        <article class="card rv" data-type="desktop">
+          <div class="card-top"><span class="card-idx">05</span><span class="card-type">Electron</span></div>
+          <h3>OpenPAI 开发者客户端</h3>
+          <div class="en">OpenPAI Developer Client</div>
+          <p>面向开发者的平台客户端，围绕应用创建、配置管理与运行监控构建完整操作流，对接 REST API 与平台鉴权体系。</p>
+          <ul class="tags"><li>Electron</li><li>Node.js</li><li>React</li><li>REST API</li></ul>
+          <div class="card-foot"><span>2022</span><i class="card-arrow">→</i></div>
+        </article>
+
+        <article class="card rv" data-type="desktop">
+          <div class="card-top"><span class="card-idx">06</span><span class="card-type">Electron</span></div>
+          <h3>DCS 数据采集系统</h3>
+          <div class="en">Data Collection System</div>
+          <p>工业场景下的数据采集与监控桌面系统，通过 WebSocket 长连接采集设备数据，并用 ECharts 呈现实时曲线与异常阈值。</p>
+          <ul class="tags"><li>Electron</li><li>Vue.js</li><li>WebSocket</li><li>ECharts</li></ul>
+          <div class="card-foot"><span>2022 — 2023</span><i class="card-arrow">→</i></div>
+        </article>
+
+        <article class="card rv" data-type="web">
+          <div class="card-top"><span class="card-idx">07</span><span class="card-type">Web</span></div>
+          <h3>H5 直播应用</h3>
+          <div class="en">Live Streaming App</div>
+          <p>移动端优先的 H5 直播应用，兼顾直播间互动、弹幕与连麦体验，并用组件化方案保持多端样式一致与快速迭代。</p>
+          <ul class="tags"><li>Vue 3</li><li>Vite</li><li>Vant 4</li><li>Tailwind CSS</li><li>Pinia</li></ul>
+          <div class="card-foot"><span>2023</span><i class="card-arrow">→</i></div>
+        </article>
+
+        <article class="card rv" data-type="web">
+          <div class="card-top"><span class="card-idx">08</span><span class="card-type">Web</span></div>
+          <h3>财务智能助手平台</h3>
+          <div class="en">Finance Intelligence Platform</div>
+          <p>面向财务人员的智能工作台，整合指标看板、图表分析与数据服务，用组件化与状态管理支撑复杂表单和联动分析。</p>
+          <ul class="tags"><li>Vue 3</li><li>Element Plus</li><li>Pinia</li><li>ECharts</li></ul>
+          <div class="card-foot"><span>2023 — 2024</span><i class="card-arrow">→</i></div>
+        </article>
+
+        <article class="card rv wide" data-type="web">
+          <div class="card-top"><span class="card-idx">09</span><span class="card-type">Web · Ongoing</span></div>
+          <div class="card-body-wide">
+            <div>
+              <h3>企业管理平台</h3>
+              <div class="en">Enterprise Admin Platform</div>
+              <ul class="tags"><li>Ant Design Pro</li><li>React</li><li>Umi</li><li>Dva</li><li>RBAC</li></ul>
+            </div>
+            <p>基于 Ant Design Pro 的中后台管理系统，覆盖组织、角色与菜单的细粒度权限（RBAC），以及大量增删改查与列表页面的工程化沉淀。当前仍在持续迭代中。</p>
+          </div>
+          <div class="card-foot"><span>2024 — Now</span><i class="card-arrow">→</i></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CONTACT ================= -->
+  <section class="sec" id="contact">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <div class="sec-title">
+          <span class="sec-no">04</span>
+          <h2>Contact<em>联系方式</em></h2>
+        </div>
+        <p class="sec-desc">欢迎交流技术、机会与合作</p>
+      </div>
+
+      <div class="contact-box rv">
+        <div>
+          <div class="ct-label">Email Address</div>
+          <a class="ct-mail" href="mailto:710316789@qq.com">710316789@qq.com</a>
+          <p class="ct-sub">求职、技术交流或内容合作，都可以直接来信。我通常在 24 小时内回复邮件。</p>
+          <div class="ct-actions">
+            <a class="btn" href="mailto:710316789@qq.com"><span>发送邮件</span></a>
+            <button class="btn ghost" id="copyMail"><span>复制邮箱</span></button>
+            <span class="copy-note" id="copyNote">✓ COPIED</span>
+          </div>
+        </div>
+        <dl class="ct-list">
+          <div><dt>Location</dt><dd>中国 · 天津</dd></div>
+          <div><dt>Position</dt><dd>软件开发工程师</dd></div>
+          <div><dt>Experience</dt><dd>6 年+</dd></div>
+          <div><dt>Availability</dt><dd>开放机会</dd></div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap foot-inner">
+    <span>© 2026 霍洪旭 HUO HONGXU · 个人综合站点</span>
+    <span><a href="notes.html">手记 Notes ↗</a> — <a href="#top">Back to top ↑</a></span>
+  </div>
+</footer>
+
+<button class="scroll-top" id="toTop" aria-label="回到顶部">↑</button>
+
+<script>
+(function(){
+  "use strict";
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- progress bar ---------- */
+  var bar = document.getElementById('bar');
+  var nav = document.getElementById('nav');
+  var toTop = document.getElementById('toTop');
+  function onScroll(){
+    var h = document.documentElement.scrollHeight - window.innerHeight;
+    var p = h > 0 ? (window.scrollY / h) * 100 : 0;
+    bar.style.width = p.toFixed(2) + '%';
+    nav.classList.toggle('stuck', window.scrollY > 40);
+    toTop.classList.toggle('on', window.scrollY > 700);
+  }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+  toTop.addEventListener('click', function(){ window.scrollTo({top:0, behavior: reduce ? 'auto' : 'smooth'}); });
+
+  /* ---------- reveal on scroll ---------- */
+  var reveals = document.querySelectorAll('.rv');
+  if('IntersectionObserver' in window && !reduce){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e, i){
+        if(e.isIntersecting){
+          var el = e.target;
+          var delay = parseFloat(el.dataset.d || 0);
+          setTimeout(function(){ el.classList.add('in'); }, delay);
+          io.unobserve(el);
+        }
+      });
+    }, {threshold:.12, rootMargin:'0px 0px -8% 0px'});
+    reveals.forEach(function(el, i){
+      var sibs = el.parentElement ? Array.prototype.indexOf.call(el.parentElement.children, el) : i;
+      el.dataset.d = Math.min(sibs, 6) * 70;
+      io.observe(el);
+    });
+  } else {
+    reveals.forEach(function(el){ el.classList.add('in'); });
+  }
+
+  /* ---------- counters ---------- */
+  function countUp(el){
+    var target = parseFloat(el.dataset.count);
+    var suffix = el.dataset.suffix || '';
+    var dur = 1500, t0 = null;
+    function step(ts){
+      if(!t0) t0 = ts;
+      var k = Math.min((ts - t0) / dur, 1);
+      var e = 1 - Math.pow(1 - k, 3);
+      el.textContent = Math.round(target * e) + suffix;
+      if(k < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+  var counters = document.querySelectorAll('[data-count]');
+  if('IntersectionObserver' in window){
+    var co = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){ countUp(e.target); co.unobserve(e.target); }
+      });
+    }, {threshold:.5});
+    counters.forEach(function(c){ co.observe(c); });
+  } else { counters.forEach(countUp); }
+
+  /* ---------- skill meters ---------- */
+  var meters = document.querySelectorAll('.meter');
+  function fillMeter(m){ var w = m.dataset.w; m.style.width = w + '%'; }
+  if('IntersectionObserver' in window && !reduce){
+    var mo = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){ setTimeout(function(){ fillMeter(e.target); }, 180); mo.unobserve(e.target); }
+      });
+    }, {threshold:.4});
+    meters.forEach(function(m){ mo.observe(m); });
+  } else { meters.forEach(fillMeter); }
+
+  /* ---------- typing ---------- */
+  var phrases = [
+    'Building Electron clients that feel native.',
+    '把复杂业务拆成可维护的模块。',
+    'Turns vague requirements into working systems.',
+    '写代码，也写清楚为什么这么写。',
+    'Designing dashboards people actually read.',
+    '持续维护一套属于自己的知识库。',
+    'Notes, essays and reading list live in a separate page.'
+  ];
+  var typedEl = document.getElementById('typed');
+  var pi = 0, ci = 0, deleting = false;
+  function tick(){
+    var cur = phrases[pi];
+    typedEl.textContent = deleting ? cur.slice(0, --ci) : cur.slice(0, ++ci);
+    var delay = deleting ? 38 : 62;
+    if(!deleting && ci === cur.length){ delay = 1700; deleting = true; }
+    else if(deleting && ci === 0){ deleting = false; pi = (pi + 1) % phrases.length; delay = 320; }
+    setTimeout(tick, delay);
+  }
+  if(!reduce) tick(); else typedEl.textContent = phrases[0];
+
+  /* ---------- ticker ---------- */
+  var words = ['Electron','React','Vue 3','TypeScript','Vite','微信小程序','iOS','Swift','Objective-C','ECharts','WebSocket','Pinia','Tailwind CSS','Ant Design Pro','Node.js','FFmpeg','Umi','Dva','Tailwind','Vant Weapp'];
+  var track = document.getElementById('track');
+  var html = '';
+  for(var r=0;r<2;r++){
+    words.forEach(function(w){
+      html += '<span>' + w + '</span>';
+    });
+  }
+  track.innerHTML = html;
+
+  /* ---------- nav active state ---------- */
+  var sections = Array.prototype.slice.call(document.querySelectorAll('main section[id]'));
+  var links = Array.prototype.slice.call(document.querySelectorAll('#links a'));
+  function setActive(){
+    var y = window.scrollY + 140, cur = null;
+    sections.forEach(function(s){ if(s.offsetTop <= y) cur = s.id; });
+    links.forEach(function(a){
+      a.classList.toggle('active', a.getAttribute('href') === '#' + cur);
+    });
+  }
+  window.addEventListener('scroll', setActive, {passive:true});
+  setActive();
+
+  /* ---------- project filter ---------- */
+  var filterBtns = Array.prototype.slice.call(document.querySelectorAll('#filters button'));
+  var cards = Array.prototype.slice.call(document.querySelectorAll('#projGrid .card'));
+  filterBtns.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      filterBtns.forEach(function(b){ b.classList.remove('on'); });
+      btn.classList.add('on');
+      var f = btn.dataset.f;
+      cards.forEach(function(c){
+        var show = (f === 'all') || (c.dataset.type === f);
+        c.classList.toggle('hide', !show);
+      });
+    });
+  });
+
+  /* ---------- card spotlight + tilt ---------- */
+  if(!reduce && window.matchMedia('(hover:hover)').matches){
+    document.querySelectorAll('.card').forEach(function(card){
+      card.addEventListener('mousemove', function(ev){
+        var r = card.getBoundingClientRect();
+        var x = (ev.clientX - r.left) / r.width;
+        var y = (ev.clientY - r.top) / r.height;
+        card.style.setProperty('--mx', (x * 100) + '%');
+        card.style.setProperty('--my', (y * 100) + '%');
+        card.style.transform = 'perspective(900px) rotateY(' + ((x - .5) * 5).toFixed(2) + 'deg) rotateX(' + ((.5 - y) * 5).toFixed(2) + 'deg) translateY(-4px)';
+      });
+      card.addEventListener('mouseleave', function(){ card.style.transform = ''; });
+    });
+  }
+
+  /* ---------- custom cursor ---------- */
+  if(!reduce && window.matchMedia('(hover:hover)').matches){
+    var cur = document.getElementById('cur'), ring = document.getElementById('ring');
+    var mx = window.innerWidth/2, my = window.innerHeight/2, rx = mx, ry = my;
+    window.addEventListener('mousemove', function(ev){
+      mx = ev.clientX; my = ev.clientY;
+      cur.style.transform = 'translate(' + mx + 'px,' + my + 'px) translate(-50%,-50%)';
+      ring.classList.add('hot');
+    });
+    (function loop(){
+      rx += (mx - rx) * 0.16; ry += (my - ry) * 0.16;
+      ring.style.transform = 'translate(' + rx + 'px,' + ry + 'px) translate(-50%,-50%)';
+      requestAnimationFrame(loop);
+    })();
+    document.addEventListener('mouseleave', function(){ ring.classList.remove('hot'); });
+  }
+
+  /* ---------- copy email ---------- */
+  var copyBtn = document.getElementById('copyMail');
+  var copyNote = document.getElementById('copyNote');
+  copyBtn.addEventListener('click', function(){
+    var mail = '710316789@qq.com';
+    var done = function(){
+      copyNote.classList.add('on');
+      setTimeout(function(){ copyNote.classList.remove('on'); }, 1800);
+    };
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(mail).then(done).catch(fallback);
+    } else { fallback(); }
+    function fallback(){
+      var ta = document.createElement('textarea');
+      ta.value = mail; ta.style.position='fixed'; ta.style.opacity='0';
+      document.body.appendChild(ta); ta.select();
+      try{ document.execCommand('copy'); done(); }catch(e){}
+      document.body.removeChild(ta);
+    }
+  });
+
+  /* ---------- canvas particle field ---------- */
+  var cv = document.getElementById('fx');
+  if(cv && !reduce){
+    var ctx = cv.getContext('2d');
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    var W = 0, H = 0, nodes = [], mouse = {x:-9999, y:-9999};
+    function resize(){
+      var r = cv.parentElement.getBoundingClientRect();
+      W = cv.width = r.width * dpr; H = cv.height = r.height * dpr;
+      cv.style.width = r.width + 'px'; cv.style.height = r.height + 'px';
+      var count = Math.min(90, Math.round(r.width / 14));
+      nodes = [];
+      for(var i=0;i<count;i++){
+        nodes.push({
+          x: Math.random()*W, y: Math.random()*H,
+          vx: (Math.random()-.5)*0.22*dpr, vy: (Math.random()-.5)*0.22*dpr,
+          r: (Math.random()*1.5 + .5) * dpr
+        });
+      }
+    }
+    resize();
+    window.addEventListener('resize', resize);
+    cv.parentElement.addEventListener('mousemove', function(ev){
+      var r = cv.getBoundingClientRect();
+      mouse.x = (ev.clientX - r.left) * dpr; mouse.y = (ev.clientY - r.top) * dpr;
+    });
+    cv.parentElement.addEventListener('mouseleave', function(){ mouse.x = mouse.y = -9999; });
+
+    function draw(){
+      ctx.clearRect(0,0,W,H);
+      for(var i=0;i<nodes.length;i++){
+        var n = nodes[i];
+        n.x += n.vx; n.y += n.vy;
+        if(n.x < 0 || n.x > W) n.vx *= -1;
+        if(n.y < 0 || n.y > H) n.vy *= -1;
+        var dx = n.x - mouse.x, dy = n.y - mouse.y;
+        var d2 = dx*dx + dy*dy;
+        if(d2 < 15000 * dpr * dpr){
+          var d = Math.sqrt(d2) || 1;
+          n.x += (dx / d) * 0.6; n.y += (dy / d) * 0.6;
+        }
+      }
+      for(var a=0;a<nodes.length;a++){
+        for(var b=a+1;b<nodes.length;b++){
+          var A = nodes[a], B = nodes[b];
+          var ddx = A.x - B.x, ddy = A.y - B.y;
+          var dist = Math.sqrt(ddx*ddx + ddy*ddy);
+          var max = 148 * dpr;
+          if(dist < max){
+            ctx.strokeStyle = 'rgba(55,224,255,' + (0.14 * (1 - dist/max)).toFixed(3) + ')';
+            ctx.lineWidth = 0.6 * dpr;
+            ctx.beginPath(); ctx.moveTo(A.x, A.y); ctx.lineTo(B.x, B.y); ctx.stroke();
+          }
+        }
+      }
+      for(var k=0;k<nodes.length;k++){
+        var p = nodes[k];
+        var near = (Math.abs(p.x-mouse.x) + Math.abs(p.y-mouse.y)) < 260 * dpr;
+        ctx.fillStyle = near ? 'rgba(194,248,75,0.9)' : 'rgba(55,224,255,0.55)';
+        ctx.beginPath(); ctx.arc(p.x, p.y, p.r * (near ? 1.5 : 1), 0, Math.PI*2); ctx.fill();
+      }
+      requestAnimationFrame(draw);
+    }
+    draw();
+  }
+
+  /* ---------- clock ---------- */
+  var clock = document.getElementById('clock');
+  function tickClock(){
+    var d = new Date();
+    var p = function(n){ return (n<10?'0':'')+n; };
+    clock.textContent = p(d.getHours()) + ':' + p(d.getMinutes()) + ':' + p(d.getSeconds());
+  }
+  tickClock(); setInterval(tickClock, 1000);
+})();
+</script>
+</body>
+</html>
