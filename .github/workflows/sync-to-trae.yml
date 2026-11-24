@@ -41,7 +41,8 @@ jobs:
 
       - name: Prepare deploy source
         run: |
-          src="$(mktemp -d "${RUNNER_TEMP%/}/trae-deploy.XXXXXX")"
+          # CLI 要求源目录位于系统临时目录（/tmp）下
+          src="$(mktemp -d /tmp/trae-deploy.XXXXXX)"
           mkdir -p "$src/public/assets"
           cp index.html notes.html "$src/public/"
           cp assets/*.jpg "$src/public/assets/" 2>/dev/null || true
