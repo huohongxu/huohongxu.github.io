@@ -1,0 +1,123 @@
+name: Sync to Trae
+
+# 推送 main 分支时，自动把站点同步部署到 Trae 平台
+# 目标站点: https://huosang.traesite.cn/
+on:
+  push:
+    branches: [main]
+    paths:
+      - "index.html"
+      - "notes.html"
+      - "assets/**"
+      - "deploy/**"
+      - ".github/workflows/sync-to-trae.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: trae-sync
+  cancel-in-progress: true
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Prepare Trae credential
+        env:
+          TRAE_AUTH_STORAGE: ${{ secrets.TRAE_AUTH_STORAGE }}
+        run: |
+          if [ -z "$TRAE_AUTH_STORAGE" ]; then
+            echo "::error::缺少 Secret TRAE_AUTH_STORAGE，请在仓库 Settings → Secrets and variables → Actions 中添加。"
+            exit 1
+          fi
+          mkdir -p "$RUNNER_TEMP/trae-storage"
+          printf '%s' "$TRAE_AUTH_STORAGE" > "$RUNNER_TEMP/trae-storage/storage.json"
+          chmod 600 "$RUNNER_TEMP/trae-storage/storage.json"
+          echo "凭据长度: $(wc -c < "$RUNNER_TEMP/trae-storage/storage.json") bytes"
+
+      - name: Prepare deploy source
+        run: |
+          src="$(mktemp -d "${RUNNER_TEMP%/}/trae-deploy.XXXXXX")"
+          mkdir -p "$src/public/assets"
+          cp index.html notes.html "$src/public/"
+          cp assets/*.jpg "$src/public/assets/" 2>/dev/null || true
+          printf '{}' > "$src/execution-config.json"
+          echo "SRC_DIR=$src" >> "$GITHUB_ENV"
+          echo "--- 待部署文件 ---"
+          find "$src" -type f | sed "s|$src/||" | sort
+
+      - name: Deploy to Trae
+        id: deploy
+        env:
+          TRAE_REGION: cn
+          TRAE_PROJECT_ID: ${{ secrets.TRAE_PROJECT_ID }}
+          TRAE_CHAT_SESSION_ID: ${{ secrets.TRAE_CHAT_SESSION_ID }}
+          TRAE_GLOBAL_STORAGE_DIR: ${{ runner.temp }}/trae-storage
+        run: |
+          set -o pipefail
+          CLI="$GITHUB_WORKSPACE/deploy/trae-deploy-linux-x64"
+          chmod +x "$CLI"
+
+          echo "::group::环境自检"
+          "$CLI" check | tee /tmp/check.json
+          echo "::endgroup::"
+          python3 -c "
+          import json
+          d = json.load(open('/tmp/check.json'))
+          if not d.get('data', {}).get('credential_valid'):
+              raise SystemExit('凭据无效，请更新 Secret TRAE_AUTH_STORAGE')
+          print('凭据有效')
+          "
+
+          TITLE="Auto sync: ${GITHUB_SHA:0:7}"
+          DESC="GitHub Actions 自动同步 · ${GITHUB_REF_NAME} · $(date -u '+%Y-%m-%d %H:%M UTC')"
+
+          echo "::group::创建部署"
+          "$CLI" deployments create \
+            --site-id 37lna4m38pj0xuvvjql \
+            --title "$TITLE" \
+            --description "$DESC" \
+            --type static-web \
+            --source-dir "$SRC_DIR" \
+            --execution-config "$SRC_DIR/execution-config.json" \
+            --app-tags 267,301 | tee /tmp/create.json
+          echo "::endgroup::"
+
+          DEP_ID=$(python3 -c "import json;print(json.load(open('/tmp/create.json'))['data']['deployment_id'])")
+          echo "DEP_ID=$DEP_ID" >> "$GITHUB_ENV"
+          echo "部署 ID: $DEP_ID"
+
+      - name: Wait for deployment
+        env:
+          TRAE_REGION: cn
+          TRAE_PROJECT_ID: ${{ secrets.TRAE_PROJECT_ID }}
+          TRAE_CHAT_SESSION_ID: ${{ secrets.TRAE_CHAT_SESSION_ID }}
+          TRAE_GLOBAL_STORAGE_DIR: ${{ runner.temp }}/trae-storage
+        run: |
+          CLI="$GITHUB_WORKSPACE/deploy/trae-deploy-linux-x64"
+          "$CLI" deployments wait --deployment-id "$DEP_ID" --timeout-seconds 300 | tee /tmp/wait.json
+          python3 -c "
+          import json, sys
+          d = json.load(open('/tmp/wait.json'))
+          dep = d.get('data', {}).get('deployment', {})
+          st = dep.get('status')
+          print(f'状态: {st}')
+          if st != 9:
+              print('::error::部署未成功')
+              sys.exit(1)
+          "
+
+      - name: Verify site
+        run: |
+          echo "检查 https://huosang.traesite.cn/ ..."
+          for i in 1 2 3 4 5; do
+            code=$(curl -sSL -o /dev/null -w '%{http_code}' --max-time 20 https://huosang.traesite.cn/ || true)
+            echo "  第 $i 次: HTTP $code"
+            [ "$code" = "200" ] && { echo "✅ 同步成功"; exit 0; }
+            sleep 10
+          done
+          echo "::warning::部署已完成，但站点探活未返回 200，可能是 CDN 缓存延迟。"
