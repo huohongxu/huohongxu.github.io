@@ -1,6 +1,7 @@
 name: Sync to Trae
 
 # 推送 main 分支时，自动把站点同步部署到 Trae 平台
+# 同步链路验证: 2026-11-24
 # 目标站点: https://huosang.traesite.cn/
 on:
   push:
