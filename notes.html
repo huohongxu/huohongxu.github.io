@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>手记 · 知识库与收藏书单 | 霍洪旭</title>
+<meta name="description" content="霍洪旭的手记：长期维护的技术知识库（架构与工程化、桌面端、移动端、可视化、职业方法论、CSS 与交互设计）与收藏文章书单。" />
+<meta name="theme-color" content="#04060d" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='18' fill='%2304060d'/%3E%3Cpath d='M28 26h10v18h24V26h10v48H62V54H38v20H28z' fill='%2337e0ff'/%3E%3C/svg%3E" />
+<style>
+:root{
+  --bg:#04060d;
+  --bg-2:#070b14;
+  --surface:rgba(14,19,31,.72);
+  --surface-solid:#0a0f1a;
+  --line:rgba(255,255,255,.09);
+  --line-strong:rgba(255,255,255,.18);
+  --text:#e9edf6;
+  --text-2:#a5b0c4;
+  --text-3:#6b7689;
+  --cyan:#37e0ff;
+  --cyan-dim:rgba(55,224,255,.14);
+  --cyan-line:rgba(55,224,255,.32);
+  --amber:#ff8a4c;
+  --lime:#c2f84b;
+  --violet:#8b7bff;
+  --display:"Helvetica Neue","Arial Black","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  --sans:"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Helvetica Neue",Arial,sans-serif;
+  --mono:"SF Mono","JetBrains Mono","Roboto Mono",ui-monospace,Menlo,Consolas,monospace;
+  --wrap:1280px;
+  --ease:cubic-bezier(.22,1,.36,1);
+  --ease-io:cubic-bezier(.65,0,.35,1);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--bg);color:var(--text);
+  font-family:var(--sans);font-size:15px;line-height:1.75;
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  overflow-x:hidden;
+}
+body::before{
+  content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(900px 520px at 82% -8%, rgba(55,224,255,.15), transparent 62%),
+    radial-gradient(760px 520px at 4% 12%, rgba(139,123,255,.12), transparent 60%),
+    radial-gradient(700px 600px at 50% 108%, rgba(194,248,75,.06), transparent 60%);
+}
+body::after{
+  content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(255,255,255,.028) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.028) 1px, transparent 1px),
+    repeating-linear-gradient(0deg, rgba(255,255,255,.014) 0 1px, transparent 1px 3px);
+  background-size:64px 64px, 64px 64px, 100% 3px;
+  mask-image:radial-gradient(ellipse 120% 80% at 50% 0%, #000 30%, transparent 88%);
+  -webkit-mask-image:radial-gradient(ellipse 120% 80% at 50% 0%, #000 30%, transparent 88%);
+}
+::selection{background:var(--cyan);color:#03131a}
+a{color:inherit;text-decoration:none}
+h1,h2,h3,h4,p,ul,li,dl,dd,dt{margin:0;padding:0}
+ul{list-style:none}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+:focus-visible{outline:1px solid var(--cyan);outline-offset:4px;border-radius:2px}
+.wrap{width:100%;max-width:var(--wrap);margin:0 auto;padding:0 44px;position:relative;z-index:2}
+
+.progress{position:fixed;top:0;left:0;right:0;height:2px;z-index:200;background:rgba(255,255,255,.05)}
+.progress i{display:block;height:100%;width:0;
+  background:linear-gradient(90deg,var(--violet),var(--cyan),var(--lime));
+  box-shadow:0 0 12px rgba(55,224,255,.8);transition:width .1s linear}
+
+/* ---------- nav ---------- */
+.nav{position:fixed;top:0;left:0;right:0;z-index:150;
+  background:rgba(4,6,13,.72);backdrop-filter:blur(18px) saturate(160%);
+  border-bottom:1px solid transparent;transition:.35s var(--ease)}
+.nav.stuck{border-bottom-color:var(--line);background:rgba(4,6,13,.92)}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;height:66px;gap:28px}
+.brand{display:flex;align-items:center;gap:12px;font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase}
+.brand-mark{width:30px;height:30px;border:1px solid var(--cyan-line);display:grid;place-items:center;
+  font-family:var(--display);font-weight:800;font-size:13px;color:var(--cyan);
+  box-shadow:inset 0 0 14px rgba(55,224,255,.18);position:relative;animation:pulse 3.4s var(--ease-io) infinite}
+.brand-mark::after{content:"";position:absolute;inset:-4px;border:1px solid rgba(55,224,255,.12)}
+.brand b{font-weight:600;letter-spacing:.2em;color:var(--text)}
+.brand em{font-style:normal;color:var(--text-3)}
+.nav-links{display:flex;align-items:center;gap:4px}
+.nav-links a{position:relative;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--text-3);padding:8px 13px;transition:color .3s}
+.nav-links a span{color:var(--cyan);opacity:.55;margin-right:7px;font-size:10px}
+.nav-links a::after{content:"";position:absolute;left:13px;right:13px;bottom:2px;height:1px;
+  background:var(--cyan);transform:scaleX(0);transform-origin:left;transition:transform .4s var(--ease)}
+.nav-links a:hover{color:var(--text)}
+.nav-links a:hover::after,.nav-links a.active::after{transform:scaleX(1)}
+.nav-links a.active{color:var(--text)}
+.nav-back{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--lime);border:1px solid rgba(194,248,75,.3);padding:9px 15px;transition:.35s var(--ease);white-space:nowrap}
+.nav-back i{font-style:normal;margin-left:7px;opacity:.75;transition:.35s}
+.nav-back:hover{border-color:var(--lime);background:rgba(194,248,75,.08);box-shadow:0 0 24px -8px var(--lime)}
+.nav-back:hover i{transform:translateX(-2px)}
+@media (max-width:1080px){.nav-links{display:none}}
+
+/* ---------- page header ---------- */
+.pagehead{position:relative;padding:150px 0 62px;border-bottom:1px solid var(--line);overflow:hidden}
+.pagehead::after{content:"";position:absolute;right:-40px;top:60px;font-family:var(--display);font-weight:800;
+  font-size:150px;letter-spacing:-.03em;color:rgba(255,255,255,.02);line-height:1;pointer-events:none}
+.kicker{display:flex;align-items:center;gap:14px;font-family:var(--mono);font-size:10.5px;
+  letter-spacing:.18em;text-transform:uppercase;color:var(--text-3);margin-bottom:24px}
+.kicker::before{content:"";width:34px;height:1px;background:var(--lime)}
+.pagehead h1{font-family:var(--display);font-weight:800;line-height:.9;letter-spacing:-.035em;
+  font-size:clamp(3rem,9vw,7.4rem);text-transform:uppercase;
+  background:linear-gradient(180deg,#ffffff 0%, #b9c6dc 60%, #5d6a80 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.pagehead .cn{font-family:var(--sans);font-weight:700;font-size:clamp(1.1rem,2.4vw,1.7rem);letter-spacing:.4em;
+  color:var(--text);margin-top:16px;text-indent:.4em}
+.pagehead p{max-width:620px;margin-top:22px;color:var(--text-2);font-size:15.5px;line-height:1.9}
+.pagehead p b{color:var(--lime);font-weight:600}
+.backlink{display:inline-flex;align-items:center;gap:9px;margin-top:30px;font-family:var(--mono);font-size:11px;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--cyan);border:1px solid var(--cyan-line);padding:12px 22px;transition:.4s var(--ease)}
+.backlink:hover{background:rgba(55,224,255,.08);box-shadow:0 12px 32px -16px rgba(55,224,255,.8);transform:translateX(-3px)}
+.backlink i{font-style:normal;transition:.4s}
+.backlink:hover i{transform:translateX(-3px)}
+
+.pagehead-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;margin-top:52px;
+  background:var(--line);border:1px solid var(--line)}
+.pagehead-stats div{background:rgba(6,9,17,.72);padding:18px 20px 16px;transition:.4s var(--ease)}
+.pagehead-stats div:hover{background:rgba(194,248,75,.05)}
+.pagehead-stats b{display:block;font-family:var(--display);font-weight:800;font-size:clamp(1.5rem,2.6vw,2.1rem);line-height:1;color:var(--text)}
+.pagehead-stats span{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-3);margin-top:9px;display:block}
+
+/* ---------- sections ---------- */
+section{position:relative;z-index:2}
+.sec{padding:96px 0}
+.sec-head{display:flex;align-items:flex-end;justify-content:space-between;gap:32px;flex-wrap:wrap;
+  padding-bottom:22px;border-bottom:1px solid var(--line);margin-bottom:48px}
+.sec-title{display:flex;align-items:baseline;gap:20px}
+.sec-no{font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--cyan);position:relative;padding-top:4px}
+.sec-no::before{content:"[";opacity:.5}.sec-no::after{content:"]";opacity:.5}
+.sec-title h2{font-family:var(--display);font-weight:800;font-size:clamp(1.8rem,4vw,3rem);line-height:1;letter-spacing:-.025em;text-transform:uppercase}
+.sec-title h2 em{font-style:normal;font-family:var(--sans);font-weight:600;color:var(--text-3);font-size:.5em;letter-spacing:.16em;margin-left:14px}
+.sec-desc{font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--text-3);text-transform:uppercase;max-width:420px;line-height:1.9;text-align:right}
+
+/* ---------- knowledge base ---------- */
+.kb-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1px;background:var(--line);border:1px solid var(--line)}
+.kb-card{background:var(--surface-solid);padding:26px 26px 24px;transition:.4s var(--ease);position:relative}
+.kb-card:hover{background:rgba(55,224,255,.045)}
+.kb-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.kb-head h3{font-size:17px;font-weight:700;letter-spacing:-.01em}
+.kb-count{font-family:var(--mono);font-size:10.5px;color:var(--cyan);letter-spacing:.1em}
+.kb-card ul{margin-top:16px}
+.kb-card li{display:flex;align-items:baseline;gap:10px;padding:8px 0;font-size:13.5px;color:var(--text-2);
+  border-bottom:1px dashed rgba(255,255,255,.07);transition:.3s;cursor:default}
+.kb-card li:last-child{border-bottom:0}
+.kb-card li:hover{color:var(--cyan);padding-left:5px}
+.kb-card li i{font-style:normal;font-family:var(--mono);font-size:10px;color:var(--text-3)}
+.kb-card li b{margin-left:auto;font-family:var(--mono);font-size:10px;font-weight:400;color:var(--text-3);letter-spacing:.06em}
+.kb-more{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--cyan);
+  margin-top:16px;display:inline-block;transition:.35s}
+.kb-more:hover{letter-spacing:.2em}
+
+/* ---------- reading ---------- */
+.reading{border-top:1px solid var(--line)}
+.read-item{display:grid;grid-template-columns:74px minmax(0,1fr) 132px 150px;gap:24px;align-items:center;
+  padding:24px 12px;border-bottom:1px solid var(--line);position:relative;transition:.4s var(--ease)}
+.read-item::before{content:"";position:absolute;left:0;top:0;bottom:-1px;width:2px;background:var(--cyan);transform:scaleY(0);transition:transform .45s var(--ease)}
+.read-item:hover{background:rgba(55,224,255,.045);padding-left:20px}
+.read-item:hover::before{transform:scaleY(1)}
+.read-no{font-family:var(--mono);font-size:11px;color:var(--text-3);letter-spacing:.1em}
+.read-main h4{font-size:16px;font-weight:600;letter-spacing:-.005em;line-height:1.5;transition:.35s}
+.read-item:hover .read-main h4{color:var(--cyan)}
+.read-main p{margin-top:7px;font-size:13px;color:var(--text-3);line-height:1.7}
+.read-meta{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;color:var(--text-3);text-transform:uppercase}
+.read-tags{display:flex;gap:7px;justify-content:flex-end;flex-wrap:wrap}
+.read-tags li{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;color:var(--text-3);border:1px solid var(--line);padding:3px 8px}
+
+/* ---------- filter ---------- */
+.filters{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:38px}
+.filters button{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;
+  border:1px solid var(--line);padding:9px 15px;color:var(--text-3);transition:.35s var(--ease)}
+.filters button:hover{color:var(--text);border-color:var(--line-strong)}
+.filters button.on{background:var(--cyan);border-color:var(--cyan);color:#03131a;box-shadow:0 0 24px -8px var(--cyan)}
+
+/* ---------- footer ---------- */
+footer{border-top:1px solid var(--line);padding:34px 0;position:relative;z-index:2}
+.foot-inner{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:16px;
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;color:var(--text-3);text-transform:uppercase}
+.foot-inner a:hover{color:var(--cyan)}
+
+/* ---------- reveal ---------- */
+.rv{opacity:0;transform:translateY(26px);transition:opacity .85s var(--ease),transform .85s var(--ease)}
+.rv.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition-duration:.01ms!important}
+  .rv{opacity:1;transform:none}
+}
+
+/* ---------- responsive ---------- */
+@media (max-width:1080px){
+  .read-item{grid-template-columns:52px minmax(0,1fr);gap:14px}
+  .read-meta,.read-tags{display:none}
+}
+@media (max-width:760px){
+  .wrap{padding:0 20px}
+  .sec{padding:70px 0}
+  .sec-desc{text-align:left}
+  .pagehead{padding:120px 0 46px}
+  .pagehead-stats{grid-template-columns:1fr}
+  .pagehead .cn{letter-spacing:.3em;text-indent:.3em}
+}
+</style>
+</head>
+<body>
+
+<div class="progress"><i id="bar"></i></div>
+
+<header class="nav" id="nav">
+  <div class="wrap nav-inner">
+    <a class="brand" href="index.html">
+      <span class="brand-mark">H</span>
+      <span><b>霍洪旭</b> &nbsp;/&nbsp; <em>HUO HONGXU</em></span>
+    </a>
+    <nav class="nav-links" id="links">
+      <a href="notes.html#kb"><span>01</span>知识库</a>
+      <a href="notes.html#reading"><span>02</span>收藏书单</a>
+      <a href="index.html#resume"><span>03</span>履历</a>
+      <a href="index.html#contact"><span>04</span>联系</a>
+    </nav>
+    <a class="nav-back" href="index.html"><i>←</i>返回首页</a>
+  </div>
+</header>
+
+<main>
+
+  <!-- ================= PAGE HEADER ================= -->
+  <section class="pagehead">
+    <div class="wrap">
+      <div class="kicker">Notes · 长期维护中</div>
+      <h1>Hand Notes</h1>
+      <p class="cn">手记</p>
+      <p>
+        这里放着我长期整理的<b>技术知识库</b>与<b>收藏书单</b>。
+        前者是我在工作与学习里沉淀下来的专题笔记，后者是反复阅读并做过批注的外部文章——
+        它们和首页的项目一样，是我技术判断力的组成部分。
+      </p>
+      <a class="backlink" href="index.html"><i>←</i>Back to Home / 返回首页</a>
+
+      <div class="pagehead-stats">
+        <div><b>47</b><span>Notes Written</span></div>
+        <div><b>6</b><span>Topics</span></div>
+        <div><b>7</b><span>Saved Articles</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= KNOWLEDGE BASE ================= -->
+  <section class="sec" id="kb">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <div class="sec-title">
+          <span class="sec-no">01</span>
+          <h2>Knowledge<em>知识库</em></h2>
+        </div>
+        <p class="sec-desc">长期维护的专题笔记 · 持续更新中</p>
+      </div>
+
+      <div class="kb-grid">
+        <article class="kb-card rv">
+          <div class="kb-head"><h3>架构与工程化</h3><span class="kb-count">12 篇</span></div>
+          <ul>
+            <li><i>01</i>中大型前端项目的目录分层约定<b>2026-10</b></li>
+            <li><i>02</i>Electron 主进程 / 渲染进程职责边界<b>2026-09</b></li>
+            <li><i>03</i>构建产物瘦身与依赖体积治理<b>2026-08</b></li>
+            <li><i>04</i>CI 中的前端质量门禁设计<b>2026-07</b></li>
+            <li><i>05</i>组件库从 0 到 1 的取舍记录<b>2026-06</b></li>
+          </ul>
+          <span class="kb-more">查看全部 12 篇 →</span>
+        </article>
+
+        <article class="kb-card rv">
+          <div class="kb-head"><h3>客户端与桌面端</h3><span class="kb-count">9 篇</span></div>
+          <ul>
+            <li><i>01</i>Electron 打包体积与启动速度优化<b>2026-10</b></li>
+            <li><i>02</i>IPC 通信设计的安全边界<b>2026-09</b></li>
+            <li><i>03</i>FFmpeg 推流与本地录制实践<b>2026-08</b></li>
+            <li><i>04</i>WebSocket 重连与心跳策略<b>2026-05</b></li>
+            <li><i>05</i>多路视频播放的内存与帧率取舍<b>2026-04</b></li>
+          </ul>
+          <span class="kb-more">查看全部 9 篇 →</span>
+        </article>
+
+        <article class="kb-card rv">
+          <div class="kb-head"><h3>移动端开发</h3><span class="kb-count">7 篇</span></div>
+          <ul>
+            <li><i>01</i>小程序分包加载与首屏优化<b>2026-10</b></li>
+            <li><i>02</i>动态表单在低代码场景的抽象<b>2026-09</b></li>
+            <li><i>03</i>Vant Weapp 组件定制与主题化<b>2026-07</b></li>
+            <li><i>04</i>iOS 列表卡顿的常见定位路径<b>2026-06</b></li>
+            <li><i>05</i>跨端样式一致性方案对比<b>2026-03</b></li>
+          </ul>
+          <span class="kb-more">查看全部 7 篇 →</span>
+        </article>
+
+        <article class="kb-card rv">
+          <div class="kb-head"><h3>可视化与数据</h3><span class="kb-count">6 篇</span></div>
+          <ul>
+            <li><i>01</i>ECharts 大数据量渲染调优<b>2026-08</b></li>
+            <li><i>02</i>实时曲线的节流与数据抽稀<b>2026-07</b></li>
+            <li><i>03</i>看板指标口径统一实践<b>2026-05</b></li>
+            <li><i>04</i>前端异常监控埋点设计<b>2026-04</b></li>
+            <li><i>05</i>图表可访问性检查清单<b>2026-02</b></li>
+          </ul>
+          <span class="kb-more">查看全部 6 篇 →</span>
+        </article>
+
+        <article class="kb-card rv">
+          <div class="kb-head"><h3>职业与方法论</h3><span class="kb-count">5 篇</span></div>
+          <ul>
+            <li><i>01</i>需求模糊时如何拆解与确认<b>2026-09</b></li>
+            <li><i>02</i>技术方案评审的检查清单<b>2026-06</b></li>
+            <li><i>03</i>我的技术笔记写作规范<b>2026-04</b></li>
+            <li><i>04</i>从功能实现到可维护性的重构<b>2026-03</b></li>
+            <li><i>05</i>团队协作中的接口契约先行<b>2026-01</b></li>
+          </ul>
+          <span class="kb-more">查看全部 5 篇 →</span>
+        </article>
+
+        <article class="kb-card rv">
+          <div class="kb-head"><h3>CSS 与交互设计</h3><span class="kb-count">8 篇</span></div>
+          <ul>
+            <li><i>01</i>高质量动效的节奏与缓动曲线<b>2026-10</b></li>
+            <li><i>02</i>深色主题的对比度与层次构建<b>2026-08</b></li>
+            <li><i>03</i>Grid 与 Flex 的实际选型对照<b>2026-07</b></li>
+            <li><i>04</i>Tailwind 在中后台的落地方式<b>2026-05</b></li>
+            <li><i>05</i>微交互设计清单<b>2026-02</b></li>
+          </ul>
+          <span class="kb-more">查看全部 8 篇 →</span>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= READING ================= -->
+  <section class="sec" id="reading">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <div class="sec-title">
+          <span class="sec-no">02</span>
+          <h2>Reading<em>收藏与书单</em></h2>
+        </div>
+        <p class="sec-desc">反复阅读并做笔记的外部文章 · 长期更新</p>
+      </div>
+
+      <div class="reading rv">
+        <div class="read-item">
+          <span class="read-no">R-01</span>
+          <div class="read-main">
+            <h4>大型前端应用的分层架构演进</h4>
+            <p>从模板化到领域驱动的组织方式，以及目录约定如何反哺团队协作。</p>
+          </div>
+          <span class="read-meta">Architecture</span>
+          <ul class="read-tags"><li>架构</li><li>工程化</li></ul>
+        </div>
+        <div class="read-item">
+          <span class="read-no">R-02</span>
+          <div class="read-main">
+            <h4>Electron 应用性能调优实践总结</h4>
+            <p>启动耗时、首屏渲染、内存占用三条主线的定位手段与优化收益对照。</p>
+          </div>
+          <span class="read-meta">Electron</span>
+          <ul class="read-tags"><li>桌面端</li><li>性能</li></ul>
+        </div>
+        <div class="read-item">
+          <span class="read-no">R-03</span>
+          <div class="read-main">
+            <h4>实时通信协议选型：WebSocket 与轮询的边界</h4>
+            <p>心跳、重连、消息顺序与断线补偿在各业务场景中的取舍逻辑。</p>
+          </div>
+          <span class="read-meta">Realtime</span>
+          <ul class="read-tags"><li>网络</li><li>后端协作</li></ul>
+        </div>
+        <div class="read-item">
+          <span class="read-no">R-04</span>
+          <div class="read-main">
+            <h4>数据可视化的信息密度与视觉层次</h4>
+            <p>如何在有限的界面里同时表达"多"与"清楚"，图表与文案如何配合。</p>
+          </div>
+          <span class="read-meta">Visualization</span>
+          <ul class="read-tags"><li>可视化</li><li>设计</li></ul>
+        </div>
+        <div class="read-item">
+          <span class="read-no">R-05</span>
+          <div class="read-main">
+            <h4>深色模式设计中的对比度陷阱</h4>
+            <p>纯黑背景的层级错觉、发光饱和度的合理区间与可读性底线。</p>
+          </div>
+          <span class="read-meta">UI Design</span>
+          <ul class="read-tags"><li>设计系统</li><li>可访问性</li></ul>
+        </div>
+        <div class="read-item">
+          <span class="read-no">R-06</span>
+          <div class="read-main">
+            <h4>小程序性能优化的常见误区</h4>
+            <p>包体积、首屏渲染、setData 频率三类高频问题的真实影响面。</p>
+          </div>
+          <span class="read-meta">Mini-Program</span>
+          <ul class="read-tags"><li>移动端</li><li>性能</li></ul>
+        </div>
+        <div class="read-item">
+          <span class="read-no">R-07</span>
+          <div class="read-main">
+            <h4>工程师的写作习惯与技术影响力</h4>
+            <p>为什么持续写作能反过来提升设计能力，以及如何建立可持续的笔记系统。</p>
+          </div>
+          <span class="read-meta">Career</span>
+          <ul class="read-tags"><li>职业</li><li>方法论</li></ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap foot-inner">
+    <span>© 2026 霍洪旭 HUO HONGXU · 手记 Hand Notes</span>
+    <span><a href="index.html">← 返回首页 Home</a></span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* progress */
+  var bar = document.getElementById('bar');
+  var nav = document.getElementById('nav');
+  function onScroll(){
+    var h = document.documentElement.scrollHeight - window.innerHeight;
+    var p = h > 0 ? (window.scrollY / h) * 100 : 0;
+    bar.style.width = p.toFixed(2) + '%';
+    nav.classList.toggle('stuck', window.scrollY > 40);
+  }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+
+  /* reveal */
+  var reveals = document.querySelectorAll('.rv');
+  if('IntersectionObserver' in window && !reduce){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){
+          var el = e.target;
+          var delay = parseFloat(el.dataset.d || 0);
+          setTimeout(function(){ el.classList.add('in'); }, delay);
+          io.unobserve(el);
+        }
+      });
+    }, {threshold:.12, rootMargin:'0px 0px -8% 0px'});
+    reveals.forEach(function(el, i){
+      var sibs = el.parentElement ? Array.prototype.indexOf.call(el.parentElement.children, el) : i;
+      el.dataset.d = Math.min(sibs, 6) * 70;
+      io.observe(el);
+    });
+  } else {
+    reveals.forEach(function(el){ el.classList.add('in'); });
+  }
+
+  /* nav active */
+  var sections = Array.prototype.slice.call(document.querySelectorAll('main section[id]'));
+  var links = Array.prototype.slice.call(document.querySelectorAll('#links a'));
+  function setActive(){
+    var y = window.scrollY + 140, cur = null;
+    sections.forEach(function(s){ if(s.offsetTop <= y) cur = s.id; });
+    links.forEach(function(a){
+      a.classList.toggle('active', a.getAttribute('href') === '#' + cur || a.getAttribute('href') === 'notes.html#' + cur);
+    });
+  }
+  window.addEventListener('scroll', setActive, {passive:true});
+  setActive();
+})();
+</script>
+</body>
+</html>
